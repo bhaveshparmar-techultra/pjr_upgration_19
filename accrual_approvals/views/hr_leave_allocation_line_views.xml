@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+  <record id="hr_leave_allocation_line_form_view" model="ir.ui.view">
+    <field name="name">hr.leave.allocation.line.form</field>
+    <field name="model">hr.leave.allocation.line</field>
+    <field name="arch" type="xml">
+      <form string="Leave Allocation Line">
+      <header>
+        <button string="Approve" invisible="state != 'draft'" name="action_approve" type="object" class="oe_highlight"/>
+        <button string="Refuse" invisible="state != 'draft'" name="action_refuse" type="object" class="oe_highlight"/>
+        <field name="state" widget="statusbar" />
+      </header>
+        <sheet>
+          <group>
+            <field name="employee_id" />
+            <field name="allocation_id" />
+            <field name="duration" />
+            <field name="remaining_duration" />
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="hr_leave_allocation_line_tree_view" model="ir.ui.view">
+    <field name="name">hr.leave.allocation.line.tree</field>
+    <field name="model">hr.leave.allocation.line</field>
+    <field name="arch" type="xml">
+      <list string="Leave Allocation Line">
+        <field name="state" widget="badge" 
+        decoration-success="state == 'approve'"
+        decoration-danger="state == 'refuse'"
+        />
+        <field name="employee_id" />
+        <field name="allocation_id" />
+        <field name="duration" />
+        <field name="remaining_duration" />
+        <field name="create_date" />
+      </list>
+    </field>
+  </record>
+
+  <record id="hr_leave_allocation_line_action" model="ir.actions.act_window">
+    <field name="name">Leave Allocation Line</field>
+    <field name="res_model">hr.leave.allocation.line</field>
+    <field name="view_mode">list,form</field>
+    <field name="view_id" ref="hr_leave_allocation_line_tree_view" />
+  </record>
+
+  <menuitem id="hr_leave_allocation_line_menu" 
+  action="hr_leave_allocation_line_action"
+  name="Leave Allocation Line" parent="hr_holidays.menu_hr_holidays_root" sequence="10" />
+</odoo>

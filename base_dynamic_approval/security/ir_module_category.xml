@@ -1,0 +1,6 @@
+<odoo>
+    <record id="dynamic_approval_privilege" model="res.groups.privilege">
+        <field name="name">Advanced Approval</field>
+    </record>
+
+</odoo>

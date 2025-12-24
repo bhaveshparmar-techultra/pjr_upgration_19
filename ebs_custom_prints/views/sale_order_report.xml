@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="paperformat_saleorder_document" model="report.paperformat">
+        <field name="name">A4 SO Document Paper format sale order</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">40</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">30</field>
+        <field name="dpi">90</field>
+    </record>
+    <record id="sale.action_report_saleorder" model="ir.actions.report">
+        <field name="paperformat_id" ref="ebs_custom_prints.paperformat_saleorder_document"/>
+    </record>
+
+    <template id="sale_order_report_inherit1" inherit_id="sale.report_saleorder_document">
+        <!--        <xpath expr="//h2[@class='mt-4']" position="replace">-->
+        <!--            <t t-if="not (env.context.get('proforma', False) or is_pro_forma)">-->
+        <!--                <span t-if="doc.state not in ['draft','sent','approved','under_approval']">Order # </span>-->
+        <!--                <span t-if="doc.state in ['draft','sent','approved','under_approval']">Quotation # </span>-->
+        <!--            </t>-->
+        <!--        </xpath>-->
+        <xpath expr="//td[@name='td_product_quantity']" position="replace">
+            <t t-set="quantity_decimal_value" t-value="line.product_uom_qty - int(line.product_uom_qty)"/>
+            <td name="td_product_quantity" class="o_td_quantity text-end">
+                <t t-if="quantity_decimal_value != 0">
+                    <span t-esc="line.product_uom_qty"/>
+                </t>
+                <t t-else="">
+                    <span t-esc="int(line.product_uom_qty)"/>
+                </t>
+                <span t-field="line.product_uom_id">units</span>
+            </td>
+            <!-- Packing and Total Units columns added here -->
+            <td name="td_packing" class="text-center">
+                <t t-set="uom_factor" t-value="line.product_uom_id.factor"/>
+                <t t-set="factor_decimal_value"
+                   t-value="uom_factor - int(uom_factor)"/>
+                <t t-if="factor_decimal_value != 0">
+                    <span t-esc="uom_factor"/>
+                </t>
+                <t t-else="">
+                    <span t-esc="int(uom_factor)"/>
+                </t>
+            </td>
+            <td name="td_total_units" class="text-center">
+                <t t-set="total_units"
+                   t-value="line.product_uom_qty * line.product_uom_id.factor"/>
+                <t t-set="total_units_decimal_value"
+                   t-value="total_units - int(total_units)"/>
+                <t t-if="total_units_decimal_value != 0">
+                    <t t-esc="total_units"/>
+                </t>
+                <t t-else="">
+                    <t t-esc="int(total_units)"/>
+                </t>
+            </td>
+        </xpath>
+        <xpath expr="//th[@name='th_quantity']" position="after">
+            <th name="th_packing" class="text-right">Packing</th>
+            <th name="th_total_units" class="text-right">Total units</th>
+        </xpath>
+        <xpath expr="//span[@name='order_note']" position="attributes">
+            <!--            <t t-if="not is_pro_forma">-->
+            <!--                <p t-field="doc.note"/>-->
+            <!--            </t>-->
+            <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//th[@name='th_description']" position="before">
+            <th name="th_no" class="text-right">NO.</th>
+            <t t-set="line_count" t-value="0"/>
+        </xpath>
+
+        <xpath expr="//td[@name='td_product_name']" position="before">
+            <td name="td_no" class="text-end">
+                <t t-set="line_count" t-value="line_count+1"/>
+                <span t-esc="line_count"/>
+            </td>
+        </xpath>
+        <!-- Fix signature image to handle boolean values -->
+        <xpath expr="//div[@name='signature']//img" position="replace">
+            <t t-if="doc.signature and doc.signature != True">
+                <img t-att-src="image_data_uri(doc.signature)" style="max-height: 4cm; max-width: 8cm;"/>
+            </t>
+        </xpath>
+        <xpath expr="//div[@name='signature']" position="before">
+            <t t-if="is_pro_forma and doc.partner_bank_id">
+                <div class="row">
+                    <table class="table table-sm o_main_table rs-table-bordered"
+                           style="font-size:18px; width:100%;font-size:11px; ">
+                        <tr>
+                            <th name="th_bank_account">
+                                Account
+                            </th>
+                            <th name="th_bank_account_value">
+                                <t t-esc="doc.partner_bank_id.acc_holder_name"/>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th name="th_bank_name">Bank</th>
+                            <th name="th_bank_name_value">
+                                <t t-esc="doc.partner_bank_id.bank_id.name"/>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th name="th_account_number">Account
+                                Number
+                            </th>
+                            <th name="th_account_number_value">
+                                <t t-esc="doc.partner_bank_id.acc_number"/>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th name="th_iban">IBAN</th>
+                            <th name="th_iban_value">
+                                <t t-esc="doc.partner_bank_id.res_partner_iban"/>
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </t>
+        </xpath>
+
+        <xpath expr="//div[@name='so_total_summary']" position="replace">
+            <div class="clearfix" name="so_total_summary">
+                <div id="total" class="row mt-n3" name="total">
+                    <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ms-auto">
+                        <table class="o_total_table table table-borderless">
+                            <!-- Tax totals -->
+                            <t t-call="sale.document_tax_totals">
+                                <t t-set="tax_totals" t-value="doc.tax_totals"/>
+                                <t t-set="currency" t-value="doc.currency_id"/>
+                            </t>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+
+        <xpath expr="//td[@name='td_product_priceunit']" position="replace">
+            <t t-set="price_unit_decimal_value" t-value="line.price_unit - int(line.price_unit)"/>
+            <td name="td_product_priceunit" class="text-end text-nowrap">
+                <t t-if="price_unit_decimal_value != 0 ">
+                    <span t-field="line.price_unit" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
+                </t>
+                <t t-else="">
+                    <span t-esc="int(line.price_unit)"/>
+                </t>
+            </td>
+        </xpath>
+        <xpath expr="//td[@name='td_product_subtotal']" position="replace">
+            <t t-set="price_subtotal_decimal_value"
+               t-value="line.price_subtotal - int(line.price_subtotal)"/>
+            <t t-set="price_total_decimal_value"
+               t-value="line.price_total - int(line.price_total)"/>
+
+            <td t-if="not line.is_downpayment" name="td_product_subtotal" class="text-end o_price_total">
+                <t t-if="price_subtotal_decimal_value != 0 or price_total_decimal_value != 0 ">
+                    <span t-field="line.price_subtotal"/>
+                    <span t-field="line.price_total"/>
+                </t>
+                <t t-else="">
+                    <span t-esc="int(line.price_subtotal)"/>
+                    <span t-esc="int(line.price_total)"/>
+                </t>
+            </td>
+        </xpath>
+
+        <xpath expr="//th[@name='th_subtotal']" position="replace">
+            <th name="th_subtotal" class="text-center">
+                <span groups="account.group_show_line_subtotals_tax_excluded">Amount
+                    <br/>
+                    <span t-field="doc.currency_id.symbol"/>
+                </span>
+                <span groups="account.group_show_line_subtotals_tax_included">Total Price
+                    <br/>
+                    <span t-field="doc.currency_id.symbol"/>
+                </span>
+            </th>
+
+        </xpath>
+        <xpath expr="//td[@name='td_product_discount']" position="replace">
+            <td t-if="display_discount" name="td_product_discount" class="text-end">
+                <t t-set="discount_decimal_value"
+                   t-value="line.discount - int(line.discount)"/>
+                <t t-if="discount_decimal_value != 0">
+                    <span t-field="line.discount"/>
+                </t>
+                <t t-else="">
+                    <span t-esc="int(line.discount)"/>
+                </t>
+            </td>
+        </xpath>
+        <xpath expr="//td[@name='td_product_taxes']" position="replace"/>
+        <xpath expr="//th[@name='th_taxes']" position="replace"/>
+        <xpath expr="//*[@id='fiscal_position_remark']" position="after">
+            <div class="row">
+                <table class="table table-sm o_main_table rs-table-bordered"
+                       style="font-size:11px;">
+                    <tr>
+                        <th colspan="2" style="font-wight:bold;font-size:16px;">
+                            Prepared By
+                        </th>
+                        <th colspan="2" style="font-wight:bold;font-size:16px;">Check
+                            and Approved
+                        </th>
+                        <th colspan="2" style="font-wight:bold;font-size:16px;">
+                            Received By
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="text-left"
+                            style="width:90px;">Name:
+                        </th>
+                        <th style="width:33%;">
+                            <t t-esc="doc.user_id.name"/>
+                        </th>
+                        <th class="text-left"
+                            style="width:90px;">Name:
+                        </th>
+                        <th style="width:33%;">
+                            <t t-esc="doc.approved_user_id.name"/>
+
+                        </th>
+                        <th class="text-left"
+                            style="width:90px;">Name:
+                        </th>
+                        <th style="width:33%;"></th>
+                    </tr>
+                    <tr>
+                        <th class="text-left" style="">
+                            Designation:
+                        </th>
+                        <th style="">
+                            <t t-esc="doc.create_uid.function"/>
+                        </th>
+                        <th class="text-left" style="">
+                            Designation:
+                        </th>
+                        <th style="">
+                            <t t-esc="doc.approved_user_id.function"/>
+                        </th>
+                        <th class="text-left" style="">
+                            Designation:
+                        </th>
+                        <th style=""></th>
+                    </tr>
+                    <tr>
+                        <th class="text-left" style="">
+                            Signature:
+                        </th>
+                        <th class="signature">. . . . . . . . . . . . . . . . . . . . . . . . . . . .</th>
+                        <th class="text-left" style="">
+                            Signature:
+                        </th>
+                        <th class="signature">. . . . . . . . . . . . . . . . . . . . . . . . . . . .</th>
+                        <th class="text-left" style="">
+                            Signature:
+                        </th>
+                        <th class="signature">. . . . . . . . . . . . . . . . . . . . . . . . . . . .</th>
+                    </tr>
+                </table>
+            </div>
+
+        </xpath>
+    </template>
+
+
+
+</odoo>

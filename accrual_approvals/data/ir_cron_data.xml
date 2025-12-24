@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<odoo>
+
+    <record id="hr_leave_allocation_cron_accrual_custom_date" model="ir.cron">
+        <field name="name">Accrual Time Off: Updates the number of time off by date</field>
+        <field name="model_id" ref="hr_holidays.model_hr_leave_allocation"/>
+        <field name="state">code</field>
+        <field name="code">model._update_accrual_custom_date(start_date=None, end_date=None)</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+    </record>
+</odoo>

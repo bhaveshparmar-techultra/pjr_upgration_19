@@ -1,0 +1,17 @@
+{
+    'name': 'Custom Prints',
+    'version': '19.0.1.0.0',
+    'summary': 'custom prints',
+    'description': 'customize invoice print and so and po',
+    'category': 'Uncategorized',
+    'author': 'BES - omar khaled',
+    'depends': ['sale', 'account', 'sale_dynamic_approval', 'ebs_additional_bank_info'],
+    'data': ['views/sale_order_report.xml',
+             'views/sale_order_view.xml',
+             'views/account_move.xml',
+             'views/external_layout_header.xml',
+             'views/invoices_report.xml'],
+    'installable': True,
+    'auto_install': False,
+    'license': 'LGPL-3',
+}
