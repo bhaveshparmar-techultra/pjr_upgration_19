@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+    <!-- Simple checkbox group - appears in EXTRA RIGHTS section -->
+    <record id="mrp_production_cancel_user_group" model="res.groups">
+        <field name="name">Cancel Manufacturing Order</field>
+    </record>
+
+</data>
+</odoo>

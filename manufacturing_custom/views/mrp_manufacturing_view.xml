@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mrp_production_cancel_form_view" model="ir.ui.view">
+        <field name="name">mrp.production.cancel.form.view</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_cancel']" position="attributes">
+                <attribute name="confirm">Are You Sure You Want to Cancel the Order?</attribute>
+                <attribute name="groups">manufacturing_custom.mrp_production_cancel_user_group</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="product_description"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
