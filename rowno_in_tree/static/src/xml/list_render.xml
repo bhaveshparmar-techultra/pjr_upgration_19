@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Add row number header column before selector checkbox -->
+    <t t-name="rowno_in_tree.ListRenderer"
+       t-inherit="web.ListRenderer"
+       t-inherit-mode="extension">
+        <xpath expr="//thead/tr/th[hasclass('o_list_record_selector')]" position="before">
+            <th class="o_list_row_number_header text-center" style="width: 40px;">#</th>
+        </xpath>
+        <!-- Add empty cell in footer for alignment -->
+        <xpath expr="//tfoot[hasclass('o_list_footer')]/tr/td[1]" position="before">
+            <td class="o_list_row_number_footer"/>
+        </xpath>
+    </t>
+
+    <!-- Add row number cell in each record row -->
+    <t t-name="rowno_in_tree.ListRenderer.RecordRow"
+       t-inherit="web.ListRenderer.RecordRow"
+       t-inherit-mode="extension">
+        <xpath expr="//td[hasclass('o_list_record_selector')]" position="before">
+            <td class="o_list_row_number text-center text-muted" tabindex="-1">
+                <span t-esc="record_index + 1"/>
+            </td>
+        </xpath>
+    </t>
+
+</templates>

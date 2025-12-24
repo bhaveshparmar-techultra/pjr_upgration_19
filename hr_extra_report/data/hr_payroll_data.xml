@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="hr_salary_rule_WORK_PERMIT" model="hr.salary.rule">
+    <field name="amount_select">code</field>
+    <field name="code">WORK_PERMIT</field>
+    <field name="category_id" ref="hr_payroll.ALW" />
+    <field name="name">Work Permit</field>
+    <field name="sequence" eval="99" />
+    <field name="condition_select">python</field>
+    <field name="condition_python">result = version.work_permit</field>
+    <field name="amount_select">code</field>
+    <field name="amount_python_compute">result = version.work_permit</field>
+    <field name="struct_id" ref="hr_payroll.default_structure" />
+  </record>
+  <record id="hr_salary_rule_CASH_ALLOWANCE" model="hr.salary.rule">
+    <field name="amount_select">code</field>
+    <field name="code">CASH_ALLOWANCE</field>
+    <field name="category_id" ref="hr_payroll.ALW" />
+    <field name="name">Cash Allowance</field>
+    <field name="sequence" eval="99" />
+    <field name="condition_select">python</field>
+    <field name="condition_python">result = version.cash_allowance</field>
+    <field name="amount_select">code</field>
+    <field name="amount_python_compute">result = version.cash_allowance</field>
+    <field name="struct_id" ref="hr_payroll.default_structure" />
+  </record>
+
+</odoo>

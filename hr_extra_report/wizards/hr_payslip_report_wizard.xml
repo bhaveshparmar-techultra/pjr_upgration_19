@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- wizard form view -->
+  <record id="hr_payslip_report_wizard_form" model="ir.ui.view">
+    <field name="name">hr.payslip.report.wizard.form</field>
+    <field name="model">hr.payslip.report.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Payslip Report">
+        <group>
+          <group>
+            <field name="date_from" />
+            <field name="date_to" />
+          </group>
+          <div class="row">
+            <div class="col-4">
+              <label for="logo_id" />
+            </div>
+            <div class="col-4">
+              <field name="logo_id"  />
+            </div>
+            <div class="col-4">
+              <field nolabel="1" name="logo_image"
+                widget="image" class="oe_avatar"
+                options='{"preview_image": "image", "size": [80, 80]}' />
+            </div>
+          </div>
+        </group>
+        <footer>
+          <button
+            string="Print Report"
+            type="object"
+            name="print_salary_receipt_report"
+            class="btn-primary" />
+          <button string="Cancel" class="btn-secondary" special="cancel" />
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <!-- wizard action -->
+  <record id="hr_payslip_report_wizard_action" model="ir.actions.act_window">
+    <field name="name">Salary Receipt Report</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">hr.payslip.report.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="hr_payslip_report_wizard_form" />
+    <field name="target">new</field>
+  </record>
+
+  <!-- menu item -->
+  <menuitem id="hr_payslip_report_wizard_menu"
+    name="Salary Receipt Report"
+    action="hr_payslip_report_wizard_action"
+    parent="hr_payroll.menu_hr_payroll_report" sequence="10" />
+
+</odoo>

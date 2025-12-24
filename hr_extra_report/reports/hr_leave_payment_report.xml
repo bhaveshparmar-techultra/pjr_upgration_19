@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="hr_leave_payment_report_py3o_pjr" model="ir.actions.report">
+    <field name="name">Leave payment PJR</field>
+    <field name="model">hr.leave</field>
+    <field name="report_name">hr_leave_payment_report_pjr</field>
+    <field name="report_type">py3o</field>
+    <field name="py3o_filetype">pdf</field>
+    <field name="module">hr_extra_report</field>
+    <field name="py3o_template_fallback">static/hr_leave_payment_report_pjr.odt</field>
+    <field name="binding_type">report</field>
+    <field name="binding_model_id" ref="hr_holidays.model_hr_leave" />
+  </record>
+  <record id="hr_leave_payment_report_py3o_packo" model="ir.actions.report">
+    <field name="name">Leave payment PACKO</field>
+    <field name="model">hr.leave</field>
+    <field name="report_name">hr_leave_payment_report_packo</field>
+    <field name="report_type">py3o</field>
+    <field name="py3o_filetype">pdf</field>
+    <field name="module">hr_extra_report</field>
+    <field name="py3o_template_fallback">static/hr_leave_payment_report_packo.odt</field>
+    <field name="binding_type">report</field>
+    <field name="binding_model_id" ref="hr_holidays.model_hr_leave" />
+  </record>
+  <record id="hr_leave_payment_report_py3o_we" model="ir.actions.report">
+    <field name="name">Leave payment WE</field>
+    <field name="model">hr.leave</field>
+    <field name="report_name">hr_leave_payment_report_we</field>
+    <field name="report_type">py3o</field>
+    <field name="py3o_filetype">pdf</field>
+    <field name="module">hr_extra_report</field>
+    <field name="py3o_template_fallback">static/hr_leave_payment_report_we.odt</field>
+    <field name="binding_type">report</field>
+    <field name="binding_model_id" ref="hr_holidays.model_hr_leave" />
+  </record>
+  <record id="hr_leave_payment_report_py3o_marcom" model="ir.actions.report">
+    <field name="name">Leave payment MARCOM</field>
+    <field name="model">hr.leave</field>
+    <field name="report_name">hr_leave_payment_report_marcom</field>
+    <field name="report_type">py3o</field>
+    <field name="py3o_filetype">pdf</field>
+    <field name="module">hr_extra_report</field>
+    <field name="py3o_template_fallback">static/hr_leave_payment_report_marcom.odt</field>
+    <field name="binding_type">report</field>
+    <field name="binding_model_id" ref="hr_holidays.model_hr_leave" />
+  </record>
+</odoo>

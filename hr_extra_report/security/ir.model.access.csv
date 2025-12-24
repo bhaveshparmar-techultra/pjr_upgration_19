@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+hr_extra_report.access_res_company_image,access_res_company_image,hr_extra_report.model_res_company_image,base.group_user,1,1,1,1
+access_hr_payslip_report_wizard,access.hr.payslip.report.wizard,model_hr_payslip_report_wizard,base.group_user,1,1,1,1
+access_hr_payslip_component_report_wizard,access.hr.payslip.component.report.wizard,model_hr_payslip_component_report_wizard,base.group_user,1,1,1,1
+access_hr_leave_line,access.hr.leave.line,model_hr_leave_line,base.group_user,1,1,1,1

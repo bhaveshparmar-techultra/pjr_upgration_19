@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- wizard form view -->
+  <record id="hr_payslip_component_report_form" model="ir.ui.view">
+    <field name="name">hr.payslip.component.report.wizard.form</field>
+    <field name="model">hr.payslip.component.report.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Payslip Report">
+        <group>
+          <group>
+            <field name="date_from" />
+            <field name="date_to" />
+          </group>
+        </group>
+        <footer>
+          <button
+            string="Print Report"
+            type="object"
+            name="print_component_report"
+            class="btn-primary" />
+          <button string="Cancel" class="btn-secondary" special="cancel" />
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <!-- wizard action -->
+  <record id="hr_payslip_component_report_action" model="ir.actions.act_window">
+    <field name="name">Payroll Component Report</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">hr.payslip.component.report.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="hr_payslip_component_report_form" />
+    <field name="target">new</field>
+  </record>
+
+  <!-- menu item -->
+  <menuitem id="hr_payslip_component_report_menu"
+    name="Payroll Component Report"
+    action="hr_payslip_component_report_action"
+    parent="hr_payroll.menu_hr_payroll_report" sequence="10" />
+
+</odoo>

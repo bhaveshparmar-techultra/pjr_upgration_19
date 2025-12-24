@@ -1,0 +1,90 @@
+# Copyright 2017 ForgeFlow S.L.
+# Copyright 2017 Serpent Consulting Services Pvt. Ltd.
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+
+from odoo import api, fields, models
+
+
+class SaleOrder(models.Model):
+    _inherit = "sale.order"
+
+    company_check = fields.Boolean(
+        string="Company Check",
+        compute="_compute_company_check",
+    )
+
+    max_line_sequence = fields.Integer(
+        string="Max sequence in lines",
+        compute="_compute_max_line_sequence",
+        store=True,
+    )
+
+    @api.depends('company_id')
+    def _compute_company_check(self):
+        for rec in self:
+            rec.company_check = self.env.company.id == 1
+
+    @api.depends("order_line")
+    def _compute_max_line_sequence(self):
+        """Allow to know the highest sequence entered in sale order lines.
+        Then we add 1 to this value for the next sequence.
+        This value is given to the context of the o2m field in the view.
+        So when we create new sale order lines, the sequence is automatically
+        added as :  max_sequence + 1
+        """
+        for sale in self:
+            sale.max_line_sequence = max(sale.mapped("order_line.sequence") or [0]) + 1
+
+    def _reset_sequence(self):
+        for rec in self:
+            current_sequence = 1
+            for line in sorted(rec.order_line, key=lambda x: (x.sequence, x.id)):
+                if line.sequence != current_sequence:
+                    line.sequence = current_sequence
+                current_sequence += 1
+
+    def write(self, line_values):
+        res = super().write(line_values)
+        self._reset_sequence()
+        return res
+
+    def copy(self, default=None):
+        return super(SaleOrder, self.with_context(keep_line_sequence=True)).copy(
+            default
+        )
+
+
+class SaleOrderLine(models.Model):
+    _inherit = "sale.order.line"
+
+    length = fields.Float(string="Length")
+    width = fields.Float(string="Width")
+
+    # re-defines the field to change the default
+    sequence = fields.Integer(
+        help="Gives the sequence of this line when displaying the sale order.",
+        default=9999,
+    )
+
+    # displays sequence on the order line
+    sequence2 = fields.Integer(
+        help="Shows the sequence of this line in the sale order.",
+        related="sequence",
+        string="NO.",
+        readonly=True,
+        store=True,
+    )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        lines = super().create(vals_list)
+        # We do not reset the sequence if we are copying a complete sale order
+        if not self.env.context.get("keep_line_sequence"):
+            for line in lines:
+                line.order_id._reset_sequence()
+        return lines
+
+    @api.onchange('width', 'length')
+    def onchange_product_uom_qty(self):
+        for rec in self:
+            rec.product_uom_qty = rec.width * rec.length

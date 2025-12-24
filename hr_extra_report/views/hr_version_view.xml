@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Form view: Add custom fields after wage -->
+  <record id="hr_version_component_view_form" model="ir.ui.view">
+    <field name="name">hr.version.form.hr_extra_report</field>
+    <field name="model">hr.version</field>
+    <field name="inherit_id" ref="hr.hr_contract_template_form_view" />
+    <field name="arch" type="xml">
+      <div name="wage" position="after">
+        <field name="work_permit" />
+        <field name="cash_allowance" />
+      </div>
+    </field>
+  </record>
+
+  <!-- List/Tree view: Add custom fields after wage column -->
+  <record id="hr_version_list_view_inherit" model="ir.ui.view">
+    <field name="name">hr.version.list.hr_extra_report</field>
+    <field name="model">hr.version</field>
+    <field name="inherit_id" ref="hr.hr_version_list_view" />
+    <field name="arch" type="xml">
+      <field name="wage" position="after">
+        <field name="work_permit" widget="monetary" optional="show" />
+        <field name="cash_allowance" widget="monetary" optional="show" />
+      </field>
+    </field>
+  </record>
+
+</odoo>

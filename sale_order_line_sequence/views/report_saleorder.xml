@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template
+        id="report_saleorder_document_sequence"
+        inherit_id="sale.report_saleorder_document"
+    >
+        <!-- Add Sequence header column before Description -->
+        <xpath expr="//table[hasclass('o_main_table')]/thead/tr/th[@name='th_description']" position="before">
+            <th name="th_sequence" class="text-center" style="width: 40px;">
+                <strong>NO.</strong>
+            </th>
+        </xpath>
+
+        <!-- Add Sequence column for regular product lines -->
+        <xpath expr="//tr[@name='tr_product']/td[@name='td_product_name']" position="before">
+            <td name="td_sequence" class="text-center">
+                <span t-field="line.sequence2"/>
+            </td>
+        </xpath>
+
+        <!-- Add empty cell for section rows to maintain column alignment -->
+        <xpath expr="//tr[@name='tr_section']/td[@name='td_section_name']" position="before">
+            <td class="text-center"/>
+        </xpath>
+
+        <!-- Add empty cell for note rows to maintain column alignment -->
+        <xpath expr="//tr[@name='tr_note']/td[@name='td_note_name']" position="before">
+            <td class="text-center"/>
+        </xpath>
+
+        <!-- Add empty cell for combo rows to maintain column alignment -->
+        <xpath expr="//tr[@name='tr_combo']/td[@name='td_combo_name']" position="before">
+            <td class="text-center"/>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Form view: Add custom fields to employee form -->
+  <record id="hr_employee_view_form_inherit" model="ir.ui.view">
+    <field name="name">hr.employee.form.hr_extra_report</field>
+    <field name="model">hr.employee</field>
+    <field name="inherit_id" ref="hr.view_employee_form" />
+    <field name="arch" type="xml">
+      <field name="work_email" position="after">
+        <field name="file_number" />
+        <field name="joining_date" />
+      </field>
+    </field>
+  </record>
+
+  <!-- List/Tree view: Add custom fields -->
+  <record id="hr_employee_view_tree_inherit" model="ir.ui.view">
+    <field name="name">hr.employee.list.hr_extra_report</field>
+    <field name="model">hr.employee</field>
+    <field name="inherit_id" ref="hr.view_employee_tree" />
+    <field name="arch" type="xml">
+      <field name="work_email" position="after">
+        <field name="file_number" optional="show" />
+        <field name="joining_date" optional="hide" />
+      </field>
+    </field>
+  </record>
+
+</odoo>
