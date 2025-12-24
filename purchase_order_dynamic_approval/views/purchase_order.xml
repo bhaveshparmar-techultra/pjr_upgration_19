@@ -1,0 +1,64 @@
+<odoo>
+    <record id="purchase_order_form_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='purchase_delivery_invoice']" position="after">
+                <page name="approvers" string="Approvers">
+                    <field name="dynamic_approve_request_ids" readonly="1">
+                        <list editable="bottom">
+                            <field name="sequence"/>
+                            <field name="user_id"/>
+                            <field name="group_id"/>
+                            <field name="approve_date"/>
+                            <field name="approve_note"/>
+                            <field name="reject_date"/>
+                            <field name="reject_reason"/>
+                            <field name="status"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//button[@name='button_cancel']" position="attributes">
+                <attribute name="invisible">state not in ['draft', 'sent', 'approved', 'purchase'] or not id</attribute>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <field name="dynamic_approve_pending_group" invisible="1"/>
+                <field name="is_dynamic_approval_requester" invisible="1"/>
+                <field name="is_zero_amount" invisible="1"/>
+                <button name="action_dynamic_approval_request" string="Request Approval" type="object" class="btn-primary"
+                        invisible="is_zero_amount or state not in ['draft', 'sent'] or not is_dynamic_approval_requester"/>
+
+                <button name="action_dynamic_approval_request" string="Request Approval" type="object" class="btn-primary"
+                        invisible="not is_zero_amount or state not in ['draft', 'sent'] or not is_dynamic_approval_requester"
+                        confirm="Are You Sure You Want to Approve the Order with Zero Total?"/>
+
+                <button name="%(base_dynamic_approval.approve_dynamic_approval_wizard_action)d" string="Approve" type="action"
+                        class="btn-primary"
+                        invisible="not dynamic_approve_pending_group or state == 'cancel'"/>
+                <button name="%(base_dynamic_approval.reject_dynamic_approval_wizard_action)d" string="Reject" type="action"
+                        invisible="state != 'under_approval' or (not dynamic_approve_pending_group and state == 'under_approval')"/>
+
+                <button name="%(base_dynamic_approval.recall_dynamic_approval_wizard_action)d" string="Recall" type="action"
+                        invisible="state != 'under_approval' or not is_dynamic_approval_requester"/>
+            </xpath>
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="statusbar_visible">draft,sent,under_approval,approved,purchase</attribute>
+            </xpath>
+            <xpath expr="//button[@name='button_confirm'][1]" position="attributes">
+                <attribute name="invisible">state not in ['approved'] or not is_dynamic_approval_requester</attribute>
+            </xpath>
+            <xpath expr="//button[@name='button_confirm'][2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']" position="attributes">
+                <attribute name="readonly">state in ['done', 'cancel', 'under_approval', 'approved']</attribute>
+            </xpath>
+            <xpath expr="//field[@name='fiscal_position_id']" position="after">
+                <field name="dynamic_approval_id" groups="base.group_no_one"/>
+                <field name="approve_requester_id" groups="base.group_no_one"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
