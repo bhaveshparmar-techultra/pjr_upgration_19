@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="send_work_permit_expiry_notification_cron" model="ir.cron">
+        <field name="name">Automatic Work Permit Expiry Notification</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_work_permit_expiry_notification()</field>
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+    </record>
+    <record id="reset_employee_sick_leave_ploicies" model="ir.cron">
+        <field name="name">Reset Employee sick leave policies</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="state">code</field>
+        <field name="code">model.reset_employee_sick_leave_ploicies()</field>
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">12</field>
+        <field name="interval_type">months</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="mail_template_work_permit_expiry_notification" model="mail.template">
+        <field name="name">Automatic Work Permit Expiry Notification</field>
+        <field name="email_from"/>
+        <field name="email_to"/>
+        <field name="subject">Your Work Permit Expired Soon</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p>Dear,</p>
+                <p>This is to inform you that Your Work Permit Expired Soon.<br/></p>
+                <br/>
+                <p>Best regards,</p>
+            </div>
+        </field>
+        <field name="lang">{{ user.lang }}</field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+
+    <record id="mail_template_visa_expiry_notification" model="mail.template">
+        <field name="name">Automatic Visa Expiry Notification</field>
+        <field name="email_from"/>
+        <field name="email_to"/>
+        <field name="subject">Your Visa Expired Soon</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p>Dear,</p>
+                <p>This is to inform you that Your Visa Expired Soon.<br/></p>
+                <br/>
+                <p>Best regards,</p>
+            </div>
+        </field>
+        <field name="lang">{{ user.lang }}</field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+
+</odoo>

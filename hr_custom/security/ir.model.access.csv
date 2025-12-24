@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_leave_line,access.hr.leave.line,model_hr_leave_line,base.group_user,1,0,1,1
+access_hr_leave_line_part,access.hr.leave.line.part,model_hr_leave_line_part,base.group_user,1,1,1,1
+access_hr_leave_employee_policy,access.hr.leave.employee.ploicy,model_hr_leave_employee_policy,base.group_user,1,1,1,1

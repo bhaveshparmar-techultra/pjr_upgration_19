@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_version_form_inherit" model="ir.ui.view">
+        <field name="name">hr.version.view.form.inherit.hr_custom</field>
+        <field name="model">hr.version</field>
+        <field name="inherit_id" ref="hr.hr_contract_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Medical Provision" name="medical_provision"
+                    groups="hr_custom.group_medical_features">
+                    <group>
+                        <group>
+                            <field name="started_deduction_date"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Employee Insurance">
+                            <field name='active_employee_insurance' widget='boolean_toggle'/>
+                            <label for="employee_ins_amount"/>
+                            <div class="o_row mw-50" name="employee_ins_amount">
+                                <field name="employee_ins_amount" class="oe_inline o_hr_narrow_field" nolabel="1"/>
+                                <div class="mb-3">KD</div>
+                            </div>
+                            <field name="emp_ins_start_date"/>
+                            <field name="emp_ins_end_date"/>
+                            <label for="emp_ins_period"/>
+                            <div class="o_row mw-100" name="emp_ins_period">
+                                <field name="emp_ins_period" class="oe_inline o_hr_narrow_field" nolabel="1"/>
+                                <div class="mb-3">/Month</div>
+                            </div>
+                            <field name="remaining_emp_period" />
+                            <button name="open_employee_insurance_payslip" type="object" class="oe_inline" icon="fa-dollar">
+                                Related Payslip
+                            </button>
+                        </group>
+
+                        <group string="Family Insurance">
+                            <field name="active_family_insurance" widget="boolean_toggle"/>
+                            <label for="family_ins_amount"/>
+                            <div class="o_row mw-50" name="family_ins_amount">
+                                <field name="family_ins_amount" class="oe_inline o_hr_narrow_field" nolabel="1"/>
+                                <div class="mb-3">KD</div>
+                            </div>
+                            <field name="family_ins_start_date"/>
+                            <field name="family_ins_end_date"/>
+                            <label for="family_ins_period"/>
+                            <div class="o_row mw-50" name="family_ins_period">
+                                <field name="family_ins_period" class="oe_inline o_hr_narrow_field" nolabel="1"/>
+                                <div class="mb-3">/Month</div>
+                            </div>
+                            <field name="remaining_family_period" />
+                            <div class="o_row mw-100">
+                                <button name="open_family_insurance_payslip" type="object" class="oe_inline" icon="fa-dollar">
+                                    Related Payslip
+                                </button>
+                            </div>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_version_view_form" model="ir.ui.view">
+        <field name="name">hr.version.form.allowances</field>
+        <field name="model">hr.version</field>
+        <field name="inherit_id" ref="hr.hr_contract_template_form_view"/>
+        <field name="arch" type="xml">
+            <field name="wage" position="after">
+                <field name="overtime_calculation" invisible="1"/>
+            </field>
+            <xpath expr="//group[@name='salary_info']" position="after">
+                <group invisible="not overtime_calculation">
+                    <label for="yearly_ticket"/>
+                    <div class="o_row mw-50" name="yearly_ticket">
+                        <field name="yearly_ticket" class="oe_inline o_hr_narrow_field" nolabel="1"/>
+                        <div class="mb-3">KD</div>
+                    </div>
+                    <label for="phone_limit"/>
+                    <div class="o_row mw-50" name="phone_limit">
+                        <field name="phone_limit" class="oe_inline o_hr_narrow_field" nolabel="1"/>
+                        <div class="mb-3">KD</div>
+                    </div>
+                    <label for="petrol"/>
+                    <div class="o_row mw-50" name="petrol">
+                        <field name="petrol" class="oe_inline o_hr_narrow_field" nolabel="1"/>
+                        <div class="mb-3">KD</div>
+                    </div>
+                    <label for="home_allowance"/>
+                    <div class="o_row mw-50" name="home_allowance">
+                        <field name="home_allowance" class="oe_inline o_hr_narrow_field" nolabel="1"/>
+                        <div class="mb-3">KD</div>
+                    </div>
+                    <label for="medical_insurance"/>
+                    <div class="o_row mw-50" name="medical_insurance">
+                        <field name="medical_insurance" class="oe_inline o_hr_narrow_field" nolabel="1"/>
+                        <div class="mb-3">KD</div>
+                    </div>
+                    <label for="other_allowances"/>
+                    <div class="o_row mw-50" name="other_allowances">
+                        <field name="other_allowances" class="oe_inline o_hr_narrow_field" nolabel="1"/>
+                        <div class="mb-3">KD</div>
+                    </div>
+                    <label for="wps_salary"/>
+                    <div class="o_row mw-50" name="wps_salary">
+                        <field name="wps_salary" class="oe_inline o_hr_narrow_field" nolabel="1"/>
+                        <div class="mb-3">KD</div>
+                    </div>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

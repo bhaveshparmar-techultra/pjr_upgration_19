@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Inherit the hr.version form view (Contract Template Form) -->
+    <record id="hr_version_view_form_eos" model="ir.ui.view">
+        <field name="name">hr.version.form.eos</field>
+        <field name="model">hr.version</field>
+        <field name="inherit_id" ref="hr.hr_contract_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="EOS" name="eos">
+                    <group>
+                        <group string="End Of Service">
+                            <field name="eos_end_date"/>
+                            <field name="number_of_days"/>
+                            <field name="unpaid_leaves_opening_balance" groups="eos_custom.group_eos_features"/>
+                            <field name="unpaid_leaves"/>
+                            <field name="absenece_days_opening_balance" groups="eos_custom.group_eos_features"/>
+                            <field name="absence_days"/>
+                            <field name="net_days"/>
+                            <field name="debit_opening_balance" groups="eos_custom.group_eos_features"/>
+                            <field name="due_amount"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Also add to the hr.version list view -->
+    <record id="hr_version_list_view_eos" model="ir.ui.view">
+        <field name="name">hr.version.list.eos</field>
+        <field name="model">hr.version</field>
+        <field name="inherit_id" ref="hr.hr_version_list_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <field name="eos_end_date" optional="hide"/>
+                <field name="number_of_days" optional="hide"/>
+                <field name="net_days" optional="hide"/>
+                <field name="due_amount" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

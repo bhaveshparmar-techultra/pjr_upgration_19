@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Create privilege for Medical Features -->
+    <record id="res_groups_privilege_medical" model="res.groups.privilege">
+        <field name="name">Medical</field>
+        <field name="sequence">50</field>
+        <field name="category_id" ref="base.module_category_human_resources"/>
+    </record>
+
+    <!-- Security group for Medical features -->
+    <record id="group_medical_features" model="res.groups">
+        <field name="name">Medical Features</field>
+        <field name="privilege_id" ref="res_groups_privilege_medical"/>
+        <field name="comment">User can access medical provision fields on contracts.</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- EOS Request List View -->
+    <record id="view_employee_eos_request_list_view" model="ir.ui.view">
+        <field name="name">eos.request.list</field>
+        <field name="model">eos.request</field>
+        <field name="arch" type="xml">
+            <list string="EOS Request">
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="job_id"/>
+                <field name="service_type"/>
+                <field name="file_number"/>
+                <field name="request_date"/>
+                <field name="joining_date"/>
+                <field name="eos_end_date"/>
+                <field name="eos_net_days"/>
+                <field name="eos_due_amounts"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- EOS Request Form View -->
+    <record id="view_employee_eos_request_form" model="ir.ui.view">
+        <field name="name">eos.request.form</field>
+        <field name="model">eos.request</field>
+        <field name="arch" type="xml">
+            <form string="EOS Request">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="employee_id" string="Employee Name"/>
+                        <h1><field name="employee_id"/></h1>
+                    </div>
+                    <group>
+                        <group name="employee_details">
+                            <field name="department_id"/>
+                            <field name="job_id"/>
+                            <field name="service_type"/>
+                            <field name="file_number"/>
+                        </group>
+                        <group>
+                            <field name="request_date"/>
+                            <field name="joining_date"/>
+                            <field name="eos_end_date"/>
+                            <field name="eos_net_days"/>
+                            <field name="eos_due_amounts"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- EOS Request Action -->
+    <record id="hr_request_of_eos_action" model="ir.actions.act_window">
+        <field name="name">EOS Request</field>
+        <field name="res_model">eos.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new EOS Request
+            </p>
+        </field>
+    </record>
+
+    <!-- EOS Request Menu -->
+    <menuitem
+        id="hr_menu_request_of_eos"
+        name="EOS Request"
+        action="eos_custom.hr_request_of_eos_action"
+        parent="hr_payroll.menu_hr_payroll_employees"
+        sequence="36"/>
+</odoo>

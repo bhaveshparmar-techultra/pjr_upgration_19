@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Create privilege for EOS Features -->
+    <record id="res_groups_privilege_eos" model="res.groups.privilege">
+        <field name="name">EOS</field>
+        <field name="sequence">50</field>
+        <field name="category_id" ref="base.module_category_human_resources"/>
+    </record>
+
+    <!-- Security group for EOS features -->
+    <record id="group_eos_features" model="res.groups">
+        <field name="name">EOS Features</field>
+        <field name="privilege_id" ref="res_groups_privilege_eos"/>
+        <field name="comment">User can access EOS opening balance fields and system start date.</field>
+    </record>
+
+</odoo>

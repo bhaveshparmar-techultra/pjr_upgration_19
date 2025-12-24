@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<odoo>
+    <template id="report_payment_receipt_document_inherit" inherit_id="account.report_payment_receipt_document">
+        <xpath expr="//div[@class='page']" position="inside">
+            <br/>
+            <table width="100%" style="border-collapse: collapse; width: 100%; background-color: white;">
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="font-weight: bold; font-size: 16px;">Prepared By</td>
+                    <td style="font-weight: bold; font-size: 16px;">Received By</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="border-bottom: 1px solid #ddd;">Name: <span t-out="o.env.user.name"/></td>
+                    <td style="border-bottom: 1px solid #ddd;">Name:</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="border-bottom: 1px solid #ddd;">Designation: <span t-out="o.env.user.partner_id.function"/></td>
+                    <td style="border-bottom: 1px solid #ddd;">Designation:</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="border-bottom: 1px solid #ddd;">Signature: .........................</td>
+                    <td style="border-bottom: 1px solid #ddd;">Signature: .........................</td>
+                </tr>
+            </table>
+        </xpath>
+    </template>
+</odoo>

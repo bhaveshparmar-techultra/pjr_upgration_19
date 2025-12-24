@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- list view -->
+  <record id="hr_leave_line_tree_view" model="ir.ui.view">
+    <field name="name">hr.leave.line.tree</field>
+    <field name="model">hr.leave.line</field>
+    <field name="arch" type="xml">
+      <list string="Leave Line">
+        <field name="employee_id" />
+        <field name="employee_salary" />
+        <field name="month_working_days" />
+        <field name="leave_duration" />
+        <field name="from_date" />
+        <field name="to_date" />
+        <field name="leave_duration_amount" sum="Total"/>
+        <field name="leave_deduction_rate" />
+        <field name="leave_month" />
+        <field name="leave_type_id" />
+        <field name="leave_id" optional="hide"/>
+        <field name="salary_rule_code" optional="hide"/>
+      </list>
+    </field>
+  </record>
+
+  <!-- form view -->
+  <record id="hr_leave_line_form_view" model="ir.ui.view">
+    <field name="name">hr.leave.line.form</field>
+    <field name="model">hr.leave.line</field>
+    <field name="arch" type="xml">
+      <form string="Leave Line">
+        <sheet>
+          <group>
+            <field name="employee_id" />
+            <field name="leave_type_id" />
+            <field name="month_working_days" />
+            <field name="leave_duration" />
+            <field name="from_date" />
+            <field name="to_date" />
+            <field name="leave_duration_amount" />
+            <field name="leave_deduction_rate" />
+            <field name="leave_id" />
+            <field name="leave_month" />
+            <field name="salary_rule_code" />
+          </group>
+          <notebook>
+            <page name="line_parts" string="Line Parts">
+              <field name="hr_leave_line_part_ids" >
+                <list string="Line Parts" editable="bottom">
+                  <field name="hr_leave_employee_policy_id" />
+                  <field name="consumed_days" />
+                  <field name="total_deduction" sum="Total"/>
+                </list>
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- search view -->
+  <record id="hr_leave_line_search_view" model="ir.ui.view">
+    <field name="name">hr.leave.line.search</field>
+    <field name="model">hr.leave.line</field>
+    <field name="arch" type="xml">
+      <search string="Leave Line">
+        <field name="employee_id" />
+        <field name="leave_type_id" />
+        <field name="leave_month" />
+        <filter string="Employee" name="employee_id" context="{'group_by':'employee_id'}" />
+        <filter string="Leave Type" name="leave_type_id" context="{'group_by':'leave_type_id'}" />
+        <filter string="Leave Month" name="leave_month" context="{'group_by':'leave_month'}" />
+      </search>
+    </field>
+  </record>
+
+  <!-- action -->
+  <record id="hr_leave_line_action" model="ir.actions.act_window">
+    <field name="name">Leave Line</field>
+    <field name="res_model">hr.leave.line</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+  <!-- menuitem -->
+  <menuitem 
+    id="hr_leave_line_menu" 
+    name="Leave Lines" 
+    parent="hr_holidays.menu_hr_holidays_report"
+    action="hr_leave_line_action"
+  />
+
+</odoo>

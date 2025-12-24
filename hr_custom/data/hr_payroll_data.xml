@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="hr_salary_rule_EMP_INSURANCE_DED_category" model="hr.salary.rule">
+            <field name="amount_select">code</field>
+            <field name="code">EMP_INSURANCE_DED</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="name">Employee Insurance</field>
+            <field name="sequence" eval="99"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = version.active_employee_insurance and version.started_deduction_date.month &lt;= payslip.date_from.month and version.remaining_emp_period > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = -version.employee_ins_amount / version.emp_ins_period</field>
+            <field name="struct_id" ref="hr_payroll.structure_002"/>
+        </record>
+
+        <record id="hr_salary_rule_FAMILY_INSURANCE_DED_category" model="hr.salary.rule">
+            <field name="amount_select">code</field>
+            <field name="code">FAMILY_INSURANCE_DED</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="name">Family Insurance</field>
+            <field name="sequence" eval="99"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = version.active_family_insurance and version.started_deduction_date.month &lt;= payslip.date_from.month and version.remaining_family_period > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = -version.family_ins_amount / version.family_ins_period</field>
+            <field name="struct_id" ref="hr_payroll.structure_002"/>
+        </record>
+
+        <record id="hr_salary_rule_over_time" model="hr.salary.rule">
+            <field name="amount_select">fix</field>
+            <field eval="10" name="amount_fix"/>
+            <field name="quantity">1</field>
+            <field name="code">OT</field>
+            <field name="category_id" ref="hr_payroll.NET"/>
+            <field name="name">Over Time</field>
+            <field name="sequence" eval="16"/>
+            <field name="struct_id" ref="hr_payroll.structure_002"/>
+        </record>
+        <record id="hr_salary_rule_overtime" model="hr.salary.rule">
+          <field name="quantity">1</field>
+          <field name="code">OVT</field>
+          <field name="category_id" ref="hr_payroll.ALW"/>
+          <field name="name">Overtime</field>
+          <field name="sequence" eval="16"/>
+          <field name="amount_select">code</field>
+          <field name="amount_python_compute">result = payslip.overtime_total_amount</field>
+          <field name="struct_id" ref="hr_payroll.structure_002"/>
+        </record>
+        <record id="hr_salary_rule_missing_hours_amount" model="hr.salary.rule">
+          <field name="quantity">1</field>
+          <field name="code">MISSH</field>
+          <field name="category_id" ref="hr_payroll.DED"/>
+          <field name="name">Missing-Hours</field>
+          <field name="sequence" eval="16"/>
+          <field name="amount_select">code</field>
+          <field name="amount_python_compute">result = -payslip.delay_total_amount</field>
+          <field name="struct_id" ref="hr_payroll.structure_002"/>
+        </record>
+        <record id="hr_salary_rule_paid_leave_deduction" model="hr.salary.rule">
+          <field name="quantity">1</field>
+          <field name="code">LD1</field>
+          <field name="category_id" ref="hr_payroll.DED"/>
+          <field name="name">Paid Leave Deduction</field>
+          <field name="sequence" eval="16"/>
+          <field name="condition_select">python</field>
+          <field name="condition_python">result = payslip.paid_leave_amount_deducted > 0</field>
+          <field name="amount_select">code</field>
+          <field name="amount_python_compute">result = -payslip.paid_leave_amount_deducted</field>
+          <field name="struct_id" ref="hr_payroll.structure_002"/>
+        </record>
+        <record id="hr_salary_rule_leave_deduction" model="hr.salary.rule">
+          <field name="quantity">1</field>
+          <field name="code">LD</field>
+          <field name="category_id" ref="hr_payroll.DED"/>
+          <field name="name">Leave Deduction</field>
+          <field name="sequence" eval="16"/>
+          <field name="condition_select">python</field>
+          <field name="condition_python">result = payslip.unpaid_leave_amount_deducted > 0</field>
+          <field name="amount_select">code</field>
+          <field name="amount_python_compute">result = -payslip.unpaid_leave_amount_deducted</field>
+          <field name="struct_id" ref="hr_payroll.structure_002"/>
+        </record>
+        <record id="hr_salary_rule_unpaid_leave_deduction" model="hr.salary.rule">
+          <field name="quantity">1</field>
+          <field name="code">LD2</field>
+          <field name="category_id" ref="hr_payroll.DED"/>
+          <field name="name">Unpaid Leave Deduction</field>
+          <field name="sequence" eval="16"/>
+          <field name="condition_select">python</field>
+          <field name="condition_python">result = payslip.unpaid_leave_amount_deducted > 0</field>
+          <field name="amount_select">code</field>
+          <field name="amount_python_compute">result = -payslip.unpaid_leave_amount_deducted</field>
+          <field name="struct_id" ref="hr_payroll.structure_002"/>
+        </record>
+        <record id="hr_salary_rule_annual_leave_deduction" model="hr.salary.rule">
+          <field name="quantity">1</field>
+          <field name="code">LD3</field>
+          <field name="category_id" ref="hr_payroll.DED"/>
+          <field name="name">Annual Leave Deduction</field>
+          <field name="sequence" eval="16"/>
+          <field name="condition_select">python</field>
+          <field name="condition_python">result = payslip.annual_leave_amount_deducted > 0</field>
+          <field name="amount_select">code</field>
+          <field name="amount_python_compute">result = -payslip.annual_leave_amount_deducted</field>
+          <field name="struct_id" ref="hr_payroll.structure_002"/>
+        </record>
+        <record id="hr_salary_rule_other_leave_deduction" model="hr.salary.rule">
+          <field name="quantity">1</field>
+          <field name="code">LD4</field>
+          <field name="category_id" ref="hr_payroll.DED"/>
+          <field name="name">Other Leave Deduction</field>
+          <field name="sequence" eval="16"/>
+          <field name="condition_select">python</field>
+          <field name="condition_python">result = payslip.other_leave_amount_deducted > 0</field>
+          <field name="amount_select">code</field>
+          <field name="amount_python_compute">result = -payslip.other_leave_amount_deducted</field>
+          <field name="struct_id" ref="hr_payroll.structure_002"/>
+        </record>
+        <record id="hr_salary_rule_sick_leave_deduction" model="hr.salary.rule">
+          <field name="quantity">1</field>
+          <field name="code">LD5</field>
+          <field name="category_id" ref="hr_payroll.DED"/>
+          <field name="name">Sick Leave Deduction</field>
+          <field name="sequence" eval="16"/>
+          <field name="condition_select">python</field>
+          <field name="condition_python">result = payslip.sick_leave_amount_deducted > 0</field>
+          <field name="amount_select">code</field>
+          <field name="amount_python_compute">result = -payslip.sick_leave_amount_deducted</field>
+          <field name="struct_id" ref="hr_payroll.structure_002"/>
+        </record>
+
+        <record id="hr_salary_rule_missing_hours" model="hr.salary.rule">
+            <field name="amount_select">fix</field>
+            <field eval="10" name="amount_fix"/>
+            <field name="quantity">1</field>
+            <field name="code">MH</field>
+            <field name="category_id" ref="hr_payroll.NET"/>
+            <field name="name">Missing Hours</field>
+            <field name="sequence" eval="16"/>
+            <field name="struct_id" ref="hr_payroll.structure_002"/>
+        </record>
+
+    </data>
+</odoo>

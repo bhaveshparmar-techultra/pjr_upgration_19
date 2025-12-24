@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_leave_type_inherit_form" model="ir.ui.view">
+      <field name="model">hr.leave.type</field>
+      <field name="name">view.hr.leave.type.form</field>
+      <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form" />
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='responsible_ids']" position="after">
+            <field name="deduct_in_payslip" />
+            <field name="salary_rule_code" invisible="not deduct_in_payslip"/>
+            <field name="leave_deduction_rate" invisible="not deduct_in_payslip"/>
+            <field name="remove_weekend" invisible="not deduct_in_payslip"/>
+            <field name="remove_public_holiday" invisible="not deduct_in_payslip"/>
+        </xpath>
+      </field>
+    </record>
+</odoo>

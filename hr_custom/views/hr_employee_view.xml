@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_employee_form" model="ir.ui.view">
+        <field name="name">hr.employee.form.hr_custom</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <field name="country_of_birth" position="after">
+                <field name="overtime_calculation" invisible="0"/>
+                <field name="expiry_notification_days" invisible="not overtime_calculation"/>
+                <field name="visa_expiry_notification_days" invisible="not overtime_calculation"/>
+                <field name="expiry_notification_email" invisible="not overtime_calculation"/>
+                <field name="has_overtime"/>
+                <field name="has_delay"/>
+            </field>
+            <group name="application_group" position="after">
+                <group string='Working Days/Hours' name="working_days_hours">
+                    <field name="monthly_working_day" readonly="1"/>
+                    <field name="salary_per_days" readonly="1"/>
+                    <field name="salary_per_hours" readonly="1"/>
+                </group>
+            </group>
+            <xpath expr="//page[last()]" position="after">
+                <page string="Leave Deduction" name="leave_deduction">
+                    <field name="hr_leave_employee_policy_ids" widget="one2many_list">
+                        <list string="Leave Deduction" editable="bottom">
+                            <field name="sequence" widget='handle'/>
+                            <field name="day_from"/>
+                            <field name="day_to"/>
+                            <field name="deduction_rate"/>
+                            <field name="deduction_base"/>
+                            <field name="total_days"/>
+                            <field name="consumed_days"/>
+                            <field name="remaining_days"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- server action generete_sick_leave_policies -->
+    <record id="action_generate_sick_leave_policies" model="ir.actions.server">
+        <field name="name">Generate Sick Leave Policies</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="binding_model_id" ref="hr.model_hr_employee"/>
+        <field name="state">code</field>
+        <field name="code">action = records.generete_sick_leave_policies()</field>
+    </record>
+
+</odoo>
