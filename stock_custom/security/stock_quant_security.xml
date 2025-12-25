@@ -1,0 +1,10 @@
+<odoo>
+
+    <record id="inventory_quant_user_group" model="res.groups">
+        <field name="name">Allow Edit Inventory On Hand Quantity</field>
+    </record>
+
+    <record id="inventory_validation_user_group" model="res.groups">
+        <field name="name">Inventory Validation</field>
+    </record>
+</odoo>

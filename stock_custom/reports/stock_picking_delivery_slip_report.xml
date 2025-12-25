@@ -1,0 +1,195 @@
+<odoo>
+    <template id="report_delivery_document_inherit_stock_picking" inherit_id="stock.report_delivery_document">
+        <xpath expr="//t[@t-set='information_block']" position="after">
+            <t t-if="o.picking_type_id.code =='internal'">
+                <br />
+                <div class="row mt32 mb32">
+                    <div class="col-auto">
+                        <strong>From</strong>
+                        <t t-if="o.move_line_ids">
+                            <p t-field="o.move_line_ids[0].location_id"/>
+                        </t>
+                    </div>
+                    <div class="col-auto">
+                        <strong>To</strong>
+                        <t t-if="o.move_line_ids">
+                            <p t-field="o.move_line_ids[0].location_dest_id"/>
+                        </t>
+                    </div>
+                </div>
+                <br />
+            </t>
+        </xpath>
+           <xpath expr="//table[@name='stock_move_table']/tbody/tr[1]/td[2]/span[2]" position="replace">
+          </xpath>
+            <xpath expr="//table[@name='stock_move_table']/tbody/tr[1]/td[3]/span[2]" position="replace">
+          </xpath>
+         <xpath expr="//th[@name='th_sm_product']" position="after">
+            <th name="th_packing" class="text-left">Packing</th>
+            <th name="th_total_units" class="text-left">Total units</th>
+        </xpath>
+        <xpath expr="//table[@name='stock_move_table']/tbody/tr[1]/td[1]" position="after">
+            <td class="text-left">
+                <t t-if="move.product_uom.factor" t-esc="int(1/move.product_uom.factor) if move.product_uom.factor else 1"/> <!-- uom ratio-->
+            </td>
+            <td class="text-left">
+                <t t-set='uom_ratio' t-value="1/move.product_uom.factor if move.product_uom.factor else 1"/>
+                <t t-set='total_units' t-value="move.product_uom_qty * uom_ratio"/>
+                <t t-esc="int(total_units)"/>
+            </td>
+        </xpath>
+        <xpath expr="//th[@name='th_sm_product']" position="replace">
+              <th name="th_sm_product"><strong>Description</strong></th>
+        </xpath>
+        <xpath expr="//table[@name='stock_move_table']/tbody/tr[1]/td[1]" position="replace">
+            <td class="text-left">
+                <t t-if="o.sale_id">
+                    <span t-field="move.product_description"/> <!-- uom ratio-->
+                </t>
+                <t t-else="">
+                    <span t-field="move.product_id.name"/> <!-- uom ratio-->
+                </t>
+            </td>
+        </xpath>
+
+        <xpath expr="//th[@name='th_sml_product']" position="after">
+            <th name="th_sml_packing" class="text-left">Packing</th>
+            <th name="th_sml_total_units" class="text-left">Total units</th>
+        </xpath>
+        <xpath expr="//th[@name='th_sml_product']" position="replace">
+            <th name="th_sml_product" class="text-left">Description</th>
+        </xpath>
+        <xpath expr="//table[@name='stock_move_line_table']//tbody" position="replace">
+            <tbody>
+                <t t-if="o.packages_count" name="has_packages">
+                    <t t-set="packages" t-value="o.move_line_ids.mapped('result_package_id')"/>
+                    <t t-foreach="packages" t-as="package">
+                        <t t-call="stock.stock_report_delivery_package_section_line"/>
+                        <t t-set="package_move_lines" t-value="o.move_line_ids.filtered(lambda l: l.result_package_id == package)"/>
+                        <!-- If printing lots/serial numbers => keep products in original lines -->
+                        <t >
+                            <tr t-foreach="package_move_lines" t-as="move_line">
+                                <t t-call="stock.stock_report_delivery_has_serial_move_line"/>
+                            </tr>
+                        </t>
+                    </t>
+                    <!-- Make sure we do another section for package-less products if they exist -->
+                    <t t-set="move_lines" t-value="o.move_line_ids.filtered(lambda l: not l.result_package_id)"/>
+                    <t t-if="move_lines" name="no_package_move_lines">
+                        <t t-call="stock.stock_report_delivery_no_package_section_line" name="no_package_section"/>
+                        <t >
+                            <tr t-foreach="move_lines" t-as="move_line">
+                                <t t-call="stock.stock_report_delivery_has_serial_move_line"/>
+                            </tr>
+                        </t>
+                    </t>
+                </t>
+                <!-- No destination packages -->
+                <t t-else="">
+                    <!-- If printing lots/serial numbers => keep products in original lines -->
+                    <t >
+                        <tr t-foreach="o.move_line_ids" t-as="move_line">
+                            <t t-call="stock.stock_report_delivery_has_serial_move_line"/>
+                        </tr>
+                    </t>
+                </t>
+            </tbody>
+        </xpath>
+        <xpath expr="//table[@name='stock_move_line_table']" position="after">
+            <div style="color:black;">
+                <p style="font-weight: bold;">Prepared By
+                </p>
+                <p>Name :
+                    <span t-field="o.env.user.name"/>
+                </p>
+                <p>Designation :
+                </p>
+                <p>Signature : .........................
+                </p>
+            </div>
+            <br/>
+            <div style="font-weight: bold; color:black;float:left">
+                <p>
+                    We have received the goods in good condition
+                </p>
+                <p>
+                    and we undertake to pay them full in accordance
+                </p>
+                <p>
+                    The terms of payment in invoice.
+                </p>
+            </div>
+
+            <div style="font-weight: bold; color:black;float:right">
+                <p>
+                    تسلمنا البضاعة بحالة جيدة و نتعهد بسداد قيمتها الكاملة
+                </p>
+                <p style="font-weight: bold; color:black;float:right">
+                    .حسب شروط السداد الموضحه بالفاتورة</p>
+            </div>
+            <div style="clear:both">
+                <div style="font-weight: bold; color:black;float:left">
+                    <p>
+                        Received By:-</p>
+                    <p>
+                        Signature:-</p>
+                </div>
+                <div style="font-weight: bold; color:black;float:right">
+                    <p>
+                        :-المستلم</p>
+                    <p style="font-weight: bold; color:black;float:right">
+                        :-التوقيع</p>
+                </div>
+            </div>
+
+        </xpath>
+
+    </template>
+    <template id="stock_report_delivery_has_serial_move_line_inherit" inherit_id="stock.stock_report_delivery_has_serial_move_line">
+         <xpath expr="//td[1]" position="after">
+            <td class="text-left">
+                <t t-if="move_line.product_uom_id.factor" t-esc="int(1/move_line.product_uom_id.factor) if move_line.product_uom_id.factor else 1"/> <!-- uom ratio-->
+            </td>
+            <td class="text-left">
+                <t t-set='uom_ratio' t-value="1/move_line.product_uom_id.factor if move_line.product_uom_id.factor else 1"/>
+                <t t-set="total_units" t-value="move_line.quantity * uom_ratio"/>
+                <t t-esc="int(total_units)"/>
+            </td>
+              <td class="text-center" name="move_line_lot_qty_done">
+            <span t-field="move_line.quantity"/>
+        </td>
+        </xpath>
+        <xpath expr="//td[1]" position="replace">
+              <td class="text-left">
+                    <t t-if="o.sale_id">
+                        <span t-field="move_line.move_id.product_description"/> <!-- uom ratio-->
+                    </t>
+                    <t t-else="">
+                        <span t-field="move_line.product_id.name"/> <!-- uom ratio-->
+                    </t>
+                </td>
+        </xpath>
+    </template>
+    <template id="stock_report_delivery_aggregated_move_lines_inherit" inherit_id="stock.stock_report_delivery_aggregated_move_lines">
+        <xpath expr="//td[1]" position="after">
+            <td class="text-left">
+                <t t-set='uom' t-value="aggregated_lines[line]['product_uom_id']"/>
+                <t t-if="uom.factor" t-esc="int(1/uom.factor) if uom.factor else 1"/> <!-- uom ratio-->
+            </td>
+            <td class="text-left">
+                <t t-set='uom' t-value="aggregated_lines[line]['product_uom_id']"/>
+                <t t-set='uom_ratio' t-value="1/uom.factor if uom.factor else 1"/>
+                <t t-set='total_units' t-value="aggregated_lines[line]['quantity'] * uom_ratio"/>
+                <t t-esc="int(total_units)"/>
+            </td>
+        </xpath>
+        <xpath expr="//td[1]" position="replace">
+              <td class="text-left">
+                     <t t-set='description' t-value="aggregated_lines[line]['product_description']"/>
+                    <t t-esc="description"/>
+            </td>
+        </xpath>
+    </template>
+
+
+</odoo>

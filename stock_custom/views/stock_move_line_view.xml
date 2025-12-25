@@ -1,0 +1,12 @@
+<odoo>
+    <record id="view_stock_move_line_search_inherit" model="ir.ui.view">
+        <field name="name">view.stock.move.line.search.inherit</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.stock_move_line_view_search"/>
+        <field name="arch" type="xml">
+            <filter name="manufacturing" position="after">
+                <filter string="Destination Address" name="partner_id" context="{'group_by':'partner_id'}"/>
+            </filter>
+        </field>
+    </record>
+</odoo>

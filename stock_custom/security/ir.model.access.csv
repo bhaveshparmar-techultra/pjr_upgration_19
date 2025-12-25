@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_confirm_stock_quant,access.confirm.stock.quant.allow,stock_custom.model_stock_quant,stock_custom.inventory_quant_user_group,1,1,1,1

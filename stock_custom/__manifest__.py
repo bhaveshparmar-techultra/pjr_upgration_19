@@ -1,0 +1,20 @@
+{
+    "name": "Stock Custom",
+    "summary": "Customization on Stock App",
+    "category": "Inventory",
+    'author': 'Ever Business Solutions',
+    'maintainer': 'Mariam Shahin',
+    "license": "AGPL-3",
+    'website': 'https://www.everbsgroup.com/',
+    'version': '19.0.1.0.0',
+    "depends": ["stock",'sale_stock'],
+    "data": [
+        "security/stock_quant_security.xml",
+        "security/ir.model.access.csv",
+        "reports/stock_picking_delivery_slip_report.xml",
+        "views/stock_picking.xml",
+        "views/stock_move_line_view.xml",
+        "views/stock_quant_view.xml",
+        # "views/stock_inventory_view.xml",
+    ],
+}
