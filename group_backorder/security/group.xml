@@ -1,0 +1,7 @@
+<odoo>
+    <data>
+        <record id="group_backorder" model="res.groups">
+            <field name="name">Group No Backorder</field>
+        </record>
+    </data>
+</odoo>

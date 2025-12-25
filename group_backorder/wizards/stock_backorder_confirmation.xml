@@ -1,0 +1,13 @@
+<odoo>
+    <record model="ir.ui.view" id="stock_backorder_confirmation_form_view">
+        <field name="name">stock.backorder.confirmation.form</field>
+        <field name="model">stock.backorder.confirmation</field>
+        <field name="inherit_id" ref="stock.view_backorder_confirmation"/>
+        <field name="arch" type="xml">
+            <xpath expr="//footer/button[@name='process_cancel_backorder']" position="replace">
+                <field name="backorder_restrict" invisible="1"/>
+                <button name="process_cancel_backorder" string="No Backorder" type="object" class="btn-primary" invisible="show_transfers or backorder_restrict"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

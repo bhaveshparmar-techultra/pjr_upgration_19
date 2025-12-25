@@ -1,0 +1,7 @@
+<odoo>
+    <data>
+        <record id="group_unreserve" model="res.groups">
+            <field name="name">Group Unreserve</field>
+        </record>
+    </data>
+</odoo>
