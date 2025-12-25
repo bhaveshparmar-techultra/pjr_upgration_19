@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Template for creating leave details breadcrumb -->
+    <template id="portal_layout_payslips"
+              inherit_id="portal.portal_breadcrumbs"
+              priority="60">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name=='leave_details'" class="col-lg-2"
+                t-attf-class="breadcrumb-item #{'active'}">
+                <a t-attf-href="/my/leaves">
+                    <span>Leaves</span>
+                </a>
+            </li>
+            <li t-if="page_name=='leave_details'" class="col-lg-2"
+                t-attf-class="breadcrumb-item #{'active'}">
+                <em t-out="leave.name"/>
+            </li>
+        </xpath>
+    </template>
+
+
+    <template id="hr_leave_content" name="Leave Details">
+        <t t-call="portal.portal_layout">
+            <t t-set="wrapwrap_classes" t-value="'o_portal_bg_dark'"/>
+
+            <div class="row mt16 o_project_portal_sidebar">
+
+                <t t-if="is_manager" t-call="portal.portal_record_sidebar">
+                    <t t-set="classes" t-value="'col-lg-auto d-print-none'"/>
+
+                    <t t-set="entries">
+                        <ul t-if="is_manager" class="list-group list-group-flush flex-wrap flex-row flex-lg-column">
+                            <li class="list-group-item flex-grow-1">
+                                <div class="o_download_pdf btn-toolbar flex-sm-nowrap">
+                                    <div class="btn-group flex-grow-1 me-1 mb-1">
+                                        <a class="btn btn-primary btn-sm btn-block o_web_approval_approve"
+                                           t-attf-href="/leave/approve/#{leave.id}" title="Approve">Approve
+                                            <i class="fa fa-fw fa-check"/>
+                                        </a>
+                                    </div>
+                                    <div class="btn-group flex-grow-1 mb-1">
+                                        <a class="btn btn-danger btn-sm btn-block o_web_approval_reject"
+                                           t-attf-href="/leave/refuse/#{leave.id}" id="print_payslip" title="Refuse"
+                                           target="_blank">Reject
+                                            <i class="fa fa-fw fa-times"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </t>
+                </t>
+
+                <div class="col-12 col-lg justify-content-end">
+                    <div id="card" class="card">
+                        <div id="card_header" class="card-header container" data-anchor="true">
+                            <div class="row gs-0">
+                                <div class="col-md">
+                                    <h5 class="row mx-1 mb-1 mb-md-0">
+                                        <div class="col-9 text-truncate">
+                                            <span t-field="leave.name"/>
+                                        </div>
+                                        <div class="col-3 text-end">
+                                            <small class="text-end">Stage:</small>
+                                            <span t-field="leave.portal_state" class="badge rounded-pill text-bg-info"
+                                                  title="Current stage of this request"/>
+                                        </div>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="card_body" class="card-body">
+
+                            <div class="row mb-4">
+                                <strong class="col-lg-2">Employee</strong>
+                                <span class="col-lg-10" t-field="leave.employee_id"/>
+                            </div>
+
+                            <div class="row mb-4">
+                                <strong class="col-lg-2">Time Off Type</strong>
+                                <span class="col-lg-10" t-field="leave.holiday_status_id"/>
+                            </div>
+
+                            <div class="row mb-4">
+                                <strong class="col-lg-2">Dates</strong>
+                                <span t-field="leave.request_date_from" class="col-lg-2 o_datepicker_input"/>
+                                <div style="width: 4%;" class="fa fa-fw fa-arrow-right"/>
+                                <span readonly="1" class="col-lg-2 o_datepicker_input" t-field="leave.request_date_to"/>
+                            </div>
+
+                            <div style="margin-top: -10px;">
+                                <span style="margin: 120px">
+                                    <input style="margin: 10px;margin-left: 79px;" disabled="1" type="checkbox"
+                                           t-att-checked="leave.request_unit_half"/>
+                                    <t t-out="'Half Day?'"/>
+                                </span>
+                            </div>
+
+                            <br/>
+                            <br/>
+
+                            <div class="row mb-4" name="description">
+                                <div class="col-lg-12" t-field="leave.name"/>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <div id="card_body" class="card-body">
+                            <div class="row mb-4">
+                                <span class="col-lg-2">Created on</span>
+                                <span class="col-lg-10" t-field="leave.create_date"
+                                      t-options='{"widget": "datetime", "hide_seconds": True}'/>
+
+                                <span class="col-lg-2">Created by</span>
+                                <span class="col-lg-10" t-field="leave.create_uid"/>
+
+                                <span class="col-lg-2">Last Modified on</span>
+                                <span class="col-lg-10" t-field="leave.write_date"
+                                      t-options='{"widget": "datetime", "hide_seconds": True}'/>
+
+                                <span class="col-lg-2">Last Modified by</span>
+                                <span class="col-lg-10" t-field="leave.write_uid"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="o_portal_messages_container mt32" id="ticket_chat" data-anchor="true">
+                        <h4>
+                            <strong>Message and communication history</strong>
+                        </h4>
+                        <t t-call="portal.message_thread">
+                            <t t-set="token" t-value="leave.access_token"/>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+
+    <template id="leave_request_form_view" name="Leave Request Form">
+        <t t-call="portal.portal_layout">
+            <t t-set="wrapwrap_classes" t-value="'o_portal_bg_dark'"/>
+            <div class="col-12 col-lg justify-content-end">
+                <div id="card" class="card">
+                    <div id="card_header" class="card-header container" data-anchor="true">
+                        <div class="row gs-0">
+                            <div class="col-md">
+                                <h5 class="row mx-1 mb-1 mb-md-0">
+                                    <div class="col-9 text-truncate">
+                                        New Leave Request
+                                    </div>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg">
+                        <div class="o_portal_html_view shadow p-3">
+                            <form id="modal_action_dismiss_shift" t-attf-action="/submit/leave" method="post"
+                                  enctype="multipart/form-data">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <div class="row mb-4">
+                                    <strong class="col-lg-2">Employee</strong>
+                                    <span class="col-lg-10" t-field="request.env.user.employee_id"/>
+                                </div>
+                                <div class="row mb-4">
+                                    <strong class="col-lg-2">Time Off Type</strong>
+                                    <select class="col-lg-4" name="holiday_status_id" required="True">
+                                        <t t-foreach="holiday_status_ids" t-as="holiday">
+                                            <option name="holiday_status_id" t-att-value="holiday[0]"
+                                                    t-out="holiday[1]"/>
+                                        </t>
+                                    </select>
+                                </div>
+
+                                <div class="row mb-4">
+                                    <strong class="col-lg-2">Dates</strong>
+                                    <input class="col-lg-2 o_datepicker_input" type='date' name="request_date_from"/>
+                                    <div style="width: 4%;" class="fa fa-fw fa-arrow-right"/>
+                                    <input class="col-lg-2 o_datepicker_input" type='date' name="request_date_to"/>
+                                </div>
+
+                                <div style="margin-top: -10px;">
+                                    <span style="margin: 120px">
+                                        <input style="margin: 10px;margin-left: 79px;" type="checkbox"
+                                               name="request_unit_half"/>
+                                        <t t-out="'Half Day?'"/>
+                                    </span>
+                                </div>
+
+                                <div class="row mb-4 mt-4">
+                                    <strong class="col-lg-2">Attachments</strong>
+                                    <input type="file"
+                                           name="attachment_ids"
+                                           class="col-lg-4"
+                                           id="attachment_ids"
+                                           multiple="multiple"/>
+                                </div>
+
+                                <br/>
+
+                                <div>
+                                    <textarea name="name" cols="80" rows="5" placeholder="Notes..."></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-outline-success">Save</button>
+                            </form>
+                            <br/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

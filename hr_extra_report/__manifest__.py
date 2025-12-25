@@ -9,6 +9,7 @@
         'hr_payroll',
         'hr_holidays',
         'report_py3o',
+        'hr_custom',  # Required: hr.leave.line model is defined here
     ],
     'external_dependencies': {
         'python': ['toolz']

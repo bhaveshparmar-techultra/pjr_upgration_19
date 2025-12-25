@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_leaves" name="Leaves" customize_show="True" priority="60"
+              inherit_id="portal.portal_my_home">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">
+                    Leaves
+                </t>
+                <t t-set="url" t-value="'/my/leaves'"/>
+                <t t-set="placeholder_count" t-value="'leaves_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_employee_leaves" name="Leaves">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">
+                    Leaves
+                </t>
+            </t>
+            <div class="o_timeoff_dashboard">
+                <ul class="list-group list-group-flush flex-wrap flex-row flex-lg-column">
+                    <li class="list-group-item flex-grow-1">
+                        <div class="o_download_pdf btn-toolbar flex-sm-nowrap">
+                            <div class="btn-group flex-grow-1 me-1 mb-1">
+                                <a class="btn btn-secondary btn-block o_download_btn" href="/new/leave"
+                                   title="Leave Request">
+                                    <i class="fa fa-calendar"/>
+                                    Request Time Off
+                                </a>
+                            </div>
+                            <div class="btn-group flex-grow-1 mb-1">
+                                <a class="btn btn-secondary btn-block o_print_btn"
+                                   href="/new/leave" title="Request Time Off In Lieu">
+                                    <i class="fa fa-plus"/>
+                                    Request Toil
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <br/>
+                <!-- Holiday summary table - updated for Odoo 19 data structure -->
+                <!-- Structure: holiday = (name, {data_dict}, requires_allocation, leave_type_id) -->
+                <table class="table rounded mb-0 bg-white o_portal_my_doc_table">
+                    <thead>
+                        <th>Type</th>
+                        <th>Taken Days</th>
+                        <th>Remaining Days</th>
+                    </thead>
+                    <t t-foreach="holidays" t-as="holiday">
+                        <tr>
+                            <td>
+                                <span t-out="holiday[0]"/>
+                            </td>
+                            <td>
+                                <span t-out="holiday[1].get('virtual_leaves_taken', 0)"/>
+                            </td>
+                            <td>
+                                <span t-out="holiday[1].get('virtual_remaining_leaves', 0)"/>
+                            </td>
+                        </tr>
+                    </t>
+                </table>
+            </div>
+            <br/>
+            <h2>History</h2>
+            <br/>
+            <t t-if="leave_ids" t-call="portal.portal_table">
+                <t t-set="pager" t-value="pager_history"/>
+                <t t-set="classes"
+                   t-value="{
+                       'refuse': 'text-danger',
+                       'validate': 'text-success',
+                       'confirm': 'text-warning',
+                       'draft': '',
+                       'validate1': 'text-warning',
+                   }"/>
+                <t t-set="statuses"
+                   t-value="{
+                       'refuse': 'Refused',
+                       'validate': 'Approved',
+                       'confirm': 'To Approve',
+                       'draft': 'Draft',
+                       'validate1': 'Second Approve',
+                   }"/>
+                <thead>
+                    <tr class="active">
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th># Days</th>
+                    </tr>
+                </thead>
+                <t t-foreach="leave_ids" t-as="leave">
+                    <tr t-att-class="classes[leave.state]">
+                        <td>
+                            <a t-attf-href="/leave/details/#{leave.id}">
+                                <span t-out="leave.holiday_status_id.name"/>
+                            </a>
+                        </td>
+                        <td>
+                            <span t-out="leave.name or '/'"/>
+                        </td>
+                        <td>
+                            <span t-field="leave.request_date_from"/>
+                        </td>
+                        <td>
+                            <span t-field="leave.request_date_to"/>
+                        </td>
+                        <td>
+                            <span t-field="leave.number_of_days"/>
+                        </td>
+                        <td>
+                            <span t-out="statuses[leave.state]"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            <br/>
+            <h2>To Approve</h2>
+            <br/>
+            <t t-if="to_approve_leave_ids" t-call="portal.portal_table">
+                <t t-set="classes"
+                   t-value="{
+                       'refuse': 'text-danger',
+                       'validate': 'text-success',
+                       'confirm': 'text-warning',
+                       'draft': '',
+                       'validate1': 'text-warning',
+                   }"/>
+                <t t-set="statuses"
+                   t-value="{
+                       'refuse': 'Refused',
+                       'validate': 'Approved',
+                       'confirm': 'To Approve',
+                       'draft': 'Draft',
+                       'validate1': 'Second Approve',
+                   }"/>
+                <thead>
+                    <tr class="active">
+                        <th>Type</th>
+                        <th>Employee</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th># Days</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <t t-foreach="to_approve_leave_ids" t-as="leave">
+                    <tr t-att-class="classes[leave.state]">
+                        <td>
+                            <a t-attf-href="/leave/details/#{leave.id}">
+                                <span t-out="leave.holiday_status_id.name"/>
+                            </a>
+                        </td>
+                        <td>
+                            <span t-field="leave.employee_id.name"/>
+                        </td>
+                        <td>
+                            <span t-field="leave.request_date_from"/>
+                        </td>
+                        <td>
+                            <span t-field="leave.request_date_to"/>
+                        </td>
+                        <td>
+                            <span t-field="leave.number_of_days"/>
+                        </td>
+                        <td>
+                            <span t-out="statuses[leave.state]"/>
+                        </td>
+                        <td>
+                            <div class="o_web_studio_approval_button">
+                                <a t-attf-href="/leave/approve/#{leave.id}"
+                                   class="btn btn-primary btn-sm btn-block o_web_approval_approve" title="Approve">
+                                    <i class="fa fa-fw fa-check"/>
+                                </a>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="o_web_studio_approval_button">
+                                <a t-attf-href="/leave/refuse/#{leave.id}"
+                                   class="btn btn-danger btn-sm btn-block o_web_approval_reject" title="Reject">
+                                    <i class="fa fa-fw fa-times"/>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            <br/>
+            <!-- Approved section -->
+            <h2>Approved</h2>
+            <br/>
+            <t t-if="approved_leave_ids" t-call="portal.portal_table">
+                <t t-set="pager" t-value="approved_pager"/>
+                <t t-set="classes"
+                   t-value="{
+                       'refuse': 'text-danger',
+                       'validate': 'text-success',
+                       'confirm': 'text-warning',
+                       'draft': '',
+                       'validate1': 'text-warning',
+                   }"/>
+                <t t-set="statuses"
+                   t-value="{
+                       'refuse': 'Refused',
+                       'validate': 'Approved',
+                       'confirm': 'To Approve',
+                       'draft': 'Draft',
+                       'validate1': 'Second Approve',
+                   }"/>
+                <thead>
+                    <tr class="active">
+                        <th>Type</th>
+                        <th>Employee</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th># Days</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <t t-foreach="approved_leave_ids" t-as="leave">
+                    <tr t-att-class="classes[leave.state]">
+                        <td>
+                            <a t-attf-href="/leave/details/#{leave.id}">
+                                <span t-out="leave.holiday_status_id.name"/>
+                            </a>
+                        </td>
+                        <td>
+                            <span t-field="leave.employee_id.name"/>
+                        </td>
+                        <td>
+                            <span t-field="leave.request_date_from"/>
+                        </td>
+                        <td>
+                            <span t-field="leave.request_date_to"/>
+                        </td>
+                        <td>
+                            <span t-field="leave.number_of_days"/>
+                        </td>
+                        <td>
+                            <span t-out="statuses[leave.state]"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            <br/>
+        </t>
+    </template>
+</odoo>
