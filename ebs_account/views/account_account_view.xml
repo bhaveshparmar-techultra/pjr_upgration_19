@@ -1,0 +1,73 @@
+<odoo>
+    <data>
+        <record id="account_account_tree_custom" model="ir.ui.view">
+            <field name="name">account.account.tree.custom</field>
+            <field name="model">account.account</field>
+            <field name="inherit_id" ref="account.view_account_list"/>
+            <field name="priority">50</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='code']" position="before">
+                    <field name="group_id" domain="[('user_type_id','=','posting')]"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="account_account_form_custom" model="ir.ui.view">
+            <field name="name">account.account.form.custom</field>
+            <field name="model">account.account</field>
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="priority">50</field>
+            <field name="arch" type="xml">
+				<xpath expr="//field[@name='group_id']" position="replace">
+                </xpath>
+                <xpath expr="//div[2]" position="before">
+                    <group>
+                        <group>
+                            <field name="group_id" domain="[('user_type_id','=','posting')]"/>
+                        </group>
+                    </group>
+                </xpath>
+
+                
+
+            </field>
+        </record>
+
+        <record id="custom_search_panel_view" model="ir.ui.view">
+            <field name="name">Custom Search Panel</field>
+            <field name="model">account.account</field>
+            <!--            <field name="mode">primary</field>-->
+            <field name="priority">20</field>
+            <field name="inherit_id" ref="account.view_account_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search/searchpanel" position="replace">
+                    <searchpanel class="account_root">
+                        <field name="group_id" icon="fa-filter"/>
+                    </searchpanel>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="custom_account_move_line_search" model="ir.ui.view">
+            <field name="name">custom.account.move.line.search</field>
+            <field name="model">account.move.line</field>
+            <field name="priority">20</field>
+            <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search/searchpanel" position="replace">
+                    <searchpanel class="account_root">
+                        <field name="account_group_id" icon="fa-filter"/>
+                    </searchpanel>
+                </xpath>
+            </field>
+        </record>
+
+<!--        <template id="account_searchpanel_css" name="account_searchpanel_css" inherit_id="web.assets_backend">-->
+<!--            <xpath expr="." position="inside">-->
+<!--                <link rel="stylesheet" type="text/scss" href="/ebs_account/static/src/scss/account_searchpanel.scss"/>-->
+<!--            </xpath>-->
+<!--        </template>-->
+
+
+    </data>
+</odoo>

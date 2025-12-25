@@ -1,0 +1,58 @@
+<odoo>
+    <data>
+        <record id="account_group_form_custom" model="ir.ui.view">
+            <field name="name">account.group.form.custom</field>
+            <field name="model">account.group</field>
+            <field name="inherit_id" ref="account.view_account_group_form"/>
+            <field name="priority">50</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="code"/>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="parent_id"/>
+                    <field name="user_type_id"/>
+                    <field name="currency_id"/>
+                </xpath>
+            </field>
+        </record>
+
+         <record id="account_group_tree_custom" model="ir.ui.view">
+            <field name="name">account.group.tree.custom</field>
+            <field name="model">account.group</field>
+            <field name="inherit_id" ref="account.view_account_group_tree"/>
+            <field name="priority">50</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='code_prefix_start']" position="replace">
+                </xpath>
+                <xpath expr="//field[@name='code_prefix_end']" position="replace">
+                </xpath>
+
+                <xpath expr="//field[@name='name']" position="before">
+                   <field name="code"/>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="parent_id"/>
+                    <field name="user_type_id" optional="show"/>
+                    <field name="currency_id" optional="hide"/>
+                    <field name="code_prefix_start" optional="hide"/>
+                    <field name="code_prefix_end" optional="hide"/>
+                </xpath>
+
+            </field>
+         </record>
+
+        <record id="view_account_group_search_custom" model="ir.ui.view">
+            <field name="name">account.group.search.custom</field>
+            <field name="model">account.group</field>
+            <field name="inherit_id" ref="account.view_account_group_search"/>
+            <field name="arch" type="xml">
+                <field name="name" position="replace">
+                    <field name="name"
+                           filter_domain="['|', ('code', '=like', str(self) + '%'), ('name', 'ilike', self)]"
+                           string="Account group"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>
