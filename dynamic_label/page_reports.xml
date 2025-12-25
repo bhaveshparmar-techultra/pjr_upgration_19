@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="paperformat_dynamic_page_label" model="report.paperformat">
+        <field name="name">Dynamic Page Paper Format</field>
+        <field name="default" eval="True"/>
+        <field name="format">custom</field>
+        <field name="page_height">30</field>
+        <field name="page_width">60</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">0</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">0</field>
+        <field name="margin_right">0</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
+    <record id="action_report_dynamic_report" model="ir.actions.report">
+        <field name="name">Dynamic Report</field>
+        <field name="model">wizard.product.page.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">dynamic_label.dynamic_report_temp</field>
+        <field name="report_file">dynamic_label.dynamic_report_temp</field>
+        <field name="paperformat_id" ref="dynamic_label.paperformat_dynamic_page_label"/>
+    </record>
+
+</odoo>

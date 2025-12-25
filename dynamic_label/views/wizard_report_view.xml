@@ -1,0 +1,223 @@
+<odoo>
+    <!-- This is a minimal wizard form - used only from save_design context -->
+    <record id="wizard_page_label_design_form_view" model="ir.ui.view">
+        <field name="name">Product Page Label Design Wizard</field>
+        <field name="model">product.page.label.design</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <form string="Product Page Label design">
+                <group>
+                    <field name="name"/>
+                    <field name="active" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="go_to_label_wizard" string="Save" type="object" class="oe_highlight"/>
+                    or
+                    <button name="close_wizard" string="Cancel" type="object" class="oe_link"
+                            context="{'cancel_change' : True}"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Main form view for editing templates - has all fields including barcode_field -->
+    <record id="product_page_label_design_form_view" model="ir.ui.view">
+        <field name="name">Dynamic Page Label Design Template</field>
+        <field name="model">product.page.label.design</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <form string="Product Page Label design">
+                <group>
+                    <field name="name" required="1"/>
+                    <field name="active" invisible="1"/>
+                </group>
+                <notebook>
+                    <page string="Design">
+                        <field name="page_template_design"/>
+                    </page>
+                    <page string="Page">
+                        <group>
+                            <group>
+                                <field name="format"/>
+                                <field name="page_width"/>
+                                <field name="page_height"/>
+                                <field name="col_no"/>
+                                <field name="col_width"/>
+                                <field name="col_height"/>
+                                <field name="orientation"/>
+                                <field name="dpi"/>
+                            </group>
+                            <group>
+                                <field name="from_row"/>
+                                <field name="from_col"/>
+                                <field name="margin_top"/>
+                                <field name="margin_left"/>
+                                <field name="margin_bottom"/>
+                                <field name="margin_right"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Barcode">
+                        <group>
+                            <group>
+                                <field name="with_barcode"/>
+                                <field name="barcode_type"
+                                       invisible="not with_barcode"
+                                       required="with_barcode"/>
+                                <field name="barcode_height"
+                                       invisible="not with_barcode"
+                                       required="with_barcode"/>
+                                <field name="barcode_width"
+                                       invisible="not with_barcode"
+                                       required="with_barcode"/>
+                            </group>
+                            <group>
+                                <field name="humanReadable"
+                                       invisible="not with_barcode"/>
+                                <field name="display_height"
+                                       invisible="not with_barcode"
+                                       required="with_barcode"/>
+                                <field name="display_width"
+                                       invisible="not with_barcode"
+                                       required="with_barcode"/>
+                                <field name="barcode_field"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+
+    <record id="product_page_label_design_list_view" model="ir.ui.view">
+        <field name="name">Product Page Label Design</field>
+        <field name="model">product.page.label.design</field>
+        <field name="arch" type="xml">
+            <list string="Product Page Label design">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_label_design" model="ir.actions.act_window">
+        <field name="name">Product Page Label Design</field>
+        <field name="res_model">product.page.label.design</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_label_design_list" model="ir.actions.act_window.view">
+        <field eval="0" name="sequence"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="product_page_label_design_list_view"/>
+        <field name="act_window_id" ref="action_label_design"/>
+    </record>
+
+    <!-- child view first -->
+    <record id="action_label_design_form" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="product_page_label_design_form_view"/>
+        <field name="act_window_id" ref="action_label_design"/>
+    </record>
+
+    <record id="product_page_barcode_form_wizard" model="ir.ui.view">
+        <field name="name">Product Page Label</field>
+        <field name="model">wizard.product.page.report</field>
+        <field name="arch" type="xml">
+            <form string="Product Page Label">
+                <group>
+                    <field name="scan" style="margin-left:20px;" class="oe_inline"/>
+                    <field name="design_id" style="margin-left:20px;" widget="selection" class="oe_inline"/>
+                </group>
+                <group>
+                    <button name="save_design" style="margin-left:20px;" string="Save Design" type="object"
+                            context="{'from_wizard' : True}" class="oe_highlight"/>
+                </group>
+                <notebook>
+                    <page string="Products">
+                        <div>
+                            <field name="product_ids">
+                                <list string="Products" editable="top">
+                                    <field name="product_id"/>
+                                    <field name="qty"/>
+                                </list>
+                            </field>
+                        </div>
+                    </page>
+                </notebook>
+                <footer>
+                    <button name="action_print" string="Print" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_barcode_form" model="ir.actions.act_window">
+        <field name="name">Print Product Page Label</field>
+        <field name="res_model">wizard.product.page.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="product_page_barcode_form_wizard"/>
+        <field name="binding_model_id" ref="product.model_product_product"/>
+        <field name="target">new</field>
+        <field name="binding_view_types">list,form</field>
+    </record>
+
+    <!-- Also bind to product.template (main products) -->
+    <record id="action_barcode_form_template" model="ir.actions.act_window">
+        <field name="name">Print Product Page Label</field>
+        <field name="res_model">wizard.product.page.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="product_page_barcode_form_wizard"/>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="target">new</field>
+        <field name="binding_view_types">list,form</field>
+    </record>
+
+    <record id="action_print_sale_order_barcode_form" model="ir.actions.act_window">
+        <field name="name">Print Product Page Label</field>
+        <field name="res_model">wizard.product.page.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="product_page_barcode_form_wizard"/>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="target">new</field>
+        <field name="binding_view_types">list,form</field>
+    </record>
+
+    <record id="action_print_purchase_order_barcode_form" model="ir.actions.act_window">
+        <field name="name">Print Product Page Label</field>
+        <field name="res_model">wizard.product.page.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="product_page_barcode_form_wizard"/>
+        <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+        <field name="target">new</field>
+        <field name="binding_view_types">list,form</field>
+    </record>
+    <record id="action_print_stock_picking_barcode_form" model="ir.actions.act_window">
+        <field name="name">Print Product Page Label</field>
+        <field name="res_model">wizard.product.page.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="product_page_barcode_form_wizard"/>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="target">new</field>
+        <field name="binding_view_types">list,form</field>
+    </record>
+
+
+    <menuitem
+            id="product_page_label_acespritech"
+            name="Product Page Label"
+            parent="sale.product_menu_catalog"/>
+    <menuitem
+            id="menuitem_page_label_design_template"
+            action="action_label_design"
+            name="Page Label Design Template"
+            parent="product_page_label_acespritech"/>
+    <menuitem
+            id="menu_print_label"
+            action="action_barcode_form"
+            name="Print Product Page Label"
+            parent="product_page_label_acespritech"/>
+</odoo>
