@@ -156,35 +156,35 @@
             </td>
         </xpath>
         <xpath expr="//td[@name='td_product_subtotal']" position="replace">
-            <t t-set="price_subtotal_decimal_value"
-               t-value="line.price_subtotal - int(line.price_subtotal)"/>
-            <t t-set="price_total_decimal_value"
-               t-value="line.price_total - int(line.price_total)"/>
-
             <td t-if="not line.is_downpayment" name="td_product_subtotal" class="text-end o_price_total">
-                <t t-if="price_subtotal_decimal_value != 0 or price_total_decimal_value != 0 ">
-                    <span t-field="line.price_subtotal"/>
-                    <span t-field="line.price_total"/>
-                </t>
-                <t t-else="">
-                    <span t-esc="int(line.price_subtotal)"/>
-                    <span t-esc="int(line.price_total)"/>
+                <t t-if="not collapse_prices">
+                    <!-- Use price_field to determine which value to show (set earlier in template) -->
+                    <t t-if="price_field == 'price_subtotal'">
+                        <t t-set="price_decimal" t-value="line.price_subtotal - int(line.price_subtotal)"/>
+                        <t t-if="price_decimal != 0">
+                            <span t-field="line.price_subtotal"/>
+                        </t>
+                        <t t-else="">
+                            <span t-esc="int(line.price_subtotal)"/>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <t t-set="price_decimal" t-value="line.price_total - int(line.price_total)"/>
+                        <t t-if="price_decimal != 0">
+                            <span t-field="line.price_total"/>
+                        </t>
+                        <t t-else="">
+                            <span t-esc="int(line.price_total)"/>
+                        </t>
+                    </t>
                 </t>
             </td>
         </xpath>
 
         <xpath expr="//th[@name='th_subtotal']" position="replace">
             <th name="th_subtotal" class="text-center">
-                <span groups="account.group_show_line_subtotals_tax_excluded">Amount
-                    <br/>
-                    <span t-field="doc.currency_id.symbol"/>
-                </span>
-                <span groups="account.group_show_line_subtotals_tax_included">Total Price
-                    <br/>
-                    <span t-field="doc.currency_id.symbol"/>
-                </span>
+                <span>Amount<br/><span t-field="doc.currency_id.symbol"/></span>
             </th>
-
         </xpath>
         <xpath expr="//td[@name='td_product_discount']" position="replace">
             <td t-if="display_discount" name="td_product_discount" class="text-end">
