@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="external_layout_boxed_aligned_to_left" inherit_id="web.external_layout_boxed">
+        <xpath expr="//div[hasclass('col-8') and hasclass('text-end') and hasclass('mb4')]" position="attributes">
+            <attribute name="class">col-8 text-start mb4</attribute>
+        </xpath>
+    </template>
+</odoo>

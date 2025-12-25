@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.extend.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="priority" eval="99"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="sale_order_remaining_value"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit from base sale_order_tree to add field to all list views -->
+    <record id="sale_order_tree_inherit" model="ir.ui.view">
+        <field name="name">sale.order.extend.list</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree"/>
+        <field name="priority" eval="99"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='amount_total']" position="after">
+                <field name="sale_order_remaining_value" optional="hide" sum="Total Remaining Value"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
