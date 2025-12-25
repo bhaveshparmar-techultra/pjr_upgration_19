@@ -54,3 +54,18 @@ class SaleOrder(models.Model):
             if not record.order_line:
                 raise UserError(_('Please add product in order to request approval'))
         return res
+
+    def _confirmation_error_message(self):
+        """ Return whether order can be confirmed or not if not then returm error message. """
+        self.ensure_one()
+        if self.state not in {'draft', 'sent','approved'}:
+            return _("Some orders are not in a state requiring confirmation.")
+        if any(
+            not line.display_type
+            and not line.is_downpayment
+            and not line.product_id
+            for line in self.order_line
+        ):
+            return _("Some order lines are missing a product, you need to correct them before going further.")
+
+        return False
